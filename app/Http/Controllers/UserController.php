@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ListAtasanDataTable;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\DataTables\UserDataTable;
@@ -17,6 +18,11 @@ class UserController extends Controller
 
     {
         return $UserDataTable->render('pages.user');
+    }
+
+    public function listAtasan(ListAtasanDataTable $listAtasanDataTable) 
+    {
+        return $listAtasanDataTable->render('pages.user-list-atasan');
     }
 
     /**
@@ -45,6 +51,13 @@ class UserController extends Controller
             $user = new User($request->validated());
             $user->password = Hash::make($request->password);
             $user->save();
+
+            foreach($request->atasan as $key => $value) {
+                $atasan[$key] = ['level' => $value];
+            }
+            if (isset($atasan)) {
+                $user->atasan()->attach($atasan);
+            }            
 
             $divisi = Divisi::find($request->divisi);
             $user->karyawan()->create([
