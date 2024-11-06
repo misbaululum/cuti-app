@@ -21,7 +21,7 @@
         <div class="col-md-6">
             <x-forms.select name="divisi" label="Divisi :">
             @foreach ($divisi as $item)
-            <option value="{{ $item->id }}">{{ $item->nama }}</option> 
+            <option @selected($data->karyawan?->divisi_id == $item->id) value="{{ $item->id }}">{{ $item->nama }}</option> 
 
             @endforeach
             </x-forms>
@@ -29,7 +29,7 @@
         <div class="col-md-6">
             <x-forms.select name="status_karyawan" label="Status Karyawan :">
             @foreach (['Tetap' => 'tetap', 'Kontrak' => 'kontrak', 'Training' => 'training', ] as $key => $value)
-            <option value="{{ $value }}">{{ $key }}</option> 
+            <option @selected($data->karyawan?->status_karyawan == $value) value="{{ $value }}">{{ $key }}</option> 
 
             @endforeach
             </x-forms>
@@ -41,7 +41,7 @@
         <hr class="mt-3 mb-3" />
         
         <div class="col-12">
-            <button type="button" class="btn btn-info add-atasan" data-action="{{ route('users.list-atasan') }}">
+            <button type="button" class="btn btn-info add-atasan" data-action="{{ route('users.list-atasan').'?except='.$data->id }}">
                 Tambah Atasan 
             </button>
 
@@ -52,7 +52,13 @@
                     <th>Level</th>
                 </thead>
                 <tbody id="listAtasan">
-
+                    @foreach ($data->atasan as $item)
+                        <tr>
+                            <td><button type="button" class="btn btn-sm btn-danger btn-delete me-2"><i class="ti ti-trash"></i></button>{{ $item->nama }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td><input class="form-control" name="atasan[{{ $item->id }}]" value="{{ $item->pivot->level }}" /></td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -6,7 +6,7 @@
     @endif
     @foreach ($options as $key => $valueRadio)
         <div class="form-check {{ $inline ? 'form-check-inline' : '' }}">
-            <input id="{{ $id.$key }}" name="{{ $attributes->get('name') }}" {{ $attributes->merge(['class' => 'form-check-input']) }} type="radio" value="{{ $valueRadio }}">
+            <input @checked($value == $valueRadio) id="{{ $id.$key }}" name="{{ $attributes->get('name') }}" {{ $attributes->merge(['class' => 'form-check-input']) }} type="radio" value="{{ $valueRadio }}">
             <label class="form-check-label" for="{{ $id.$key }}">{{ $key }}</label>
         </div>
     @endforeach

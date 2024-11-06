@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->year('tahun');
             $table->integer('total');
-            $table->integer('digunakan');
+            $table->integer('digunakan')->default(0);
             $table->timestamps();
         });
     }

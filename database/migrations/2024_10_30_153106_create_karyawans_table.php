@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('divisi', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->boolean('active');
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
 

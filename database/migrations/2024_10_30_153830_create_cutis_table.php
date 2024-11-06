@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nomor')->unique();
             $table->foreignId('user_id')->constrained('users');
             $table->string('user_input');
-            $table->integer('sisa_cuti');
+            $table->integer('sisa_cuti_awal');
             $table->integer('total_cuti');
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');

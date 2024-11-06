@@ -1,13 +1,22 @@
 import $ from 'jquery'
 import '../vendor/datatable'
-import { AjaxAction, HandleFormSubmit, initDatepicker } from '../lib/utils'
+import { AjaxAction, confirmation, HandleFormSubmit, initDatepicker, reloadDatatable, showToast } from '../lib/utils'
 
 
-$('.main-content').on('click', '.action', function(e) {
+$('.main-content').on('click', '[data-action]', function(e) {
 
-    if (!this.dataset.action) {
-        throw new Error('data attribute action is required');
-    }
+    if (this.dataset.method == 'delete') {
+        confirmation(res => {
+            (new AjaxAction(this))
+            .onSuccess(res => {
+                showToast(res.status, res.message)
+                reloadDatatable('user-table')
+            }, false)
+            .execute()
+        })
+
+        return
+    };
 
     (new AjaxAction(this))
     .onSuccess(function(res) {
@@ -40,12 +49,19 @@ $('.main-content').on('click', '.action', function(e) {
             .execute();
         }); 
 
-        (new HandleFormSubmit())
+        $('.btn-delete').on('click', function() {
+            confirmation(() => {
+                $(this).parents('tr').remove()
+                
+            })
+        })
+
+        const handle = (new HandleFormSubmit())
         .onSuccess(res => {
 
         })
         .reloadDatatable('user-table')
-        .init()
+        .init();
     })
     .execute()
 })

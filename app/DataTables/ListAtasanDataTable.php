@@ -36,7 +36,7 @@ class ListAtasanDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->with('karyawan')->newQuery();
+        return $model->where('id', '!=', $this->except)->with('karyawan')->newQuery();
     }
 
     /**

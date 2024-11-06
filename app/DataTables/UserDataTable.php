@@ -21,9 +21,12 @@ class UserDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        //video ke 27
         return (new EloquentDataTable($query))
             ->addColumn('action', function($row) {
-                    
+                $actions['Edit'] = ['action' => route('users.edit', $row->id)]; 
+                $actions['Delete'] = ['action' => route('users.destroy', $row->id), 'method' => 'delete']; 
+                return view('action', compact('actions'));
             })
             ->addIndexColumn();
     }

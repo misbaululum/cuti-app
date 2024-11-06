@@ -3,8 +3,49 @@ import 'bootstrap-datepicker'
 import 'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'
 import $ from 'jquery'
 import 'izitoast/dist/css/iziToast.min.css'
+import Swal from 'sweetalert2'
+import select2 from 'select2'
+import 'select2/dist/css/select2.min.css'
+import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css'
 const modalEl = $('#modalAction')
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+    }
+})
+
+export function reloadDatatable(id) {
+    window.LaravelDataTables[id]?.ajax.reload(null, false)
+}
+
+export function confirmation(cb, configs = {}) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        ...configs
+      }).then((result) => {
+        if (result.isConfirmed) {
+          cb && cb(result)
+        }
+      });
+}
+
+export function initSelect2(selector = '.select2', options = {}) {
+    select2($);
+    const _select2 = $(selector)
+
+    _select2.select2({
+        placeholder: _select2.data('placeholder'),
+        theme: 'bootstrap-5',
+        dropdownParent: _select2.parents('.modal-content'),
+    });
+}
 
 export function initDatepicker(selector = '.date', options = {}) {
    const date = $(selector).datepicker({
@@ -44,11 +85,29 @@ class AjaxOption{
 
 export class AjaxAction extends AjaxOption {
 
-    constructor(el) {
+    url = ''
+    method = 'get'
+    // option = {}
+
+    constructor(el, options = {}) {
         super()
-        this.el = $(el)
-        this.label = this.el.html()
+
+        this.options = options
+        if (el instanceof HTMLElement) {
+                this.el = $(el)
+                this.label = this.el.html()
+                this.url = this.el.data('action')
+                this.method = this.el.data('method')
+        } else {
+            this.el = null
+            this.url = el
+        }
     }
+
+    // setOption(_option) {
+    //     this.options = _option
+    //     return this
+    // }
 
     onSuccess(cb, runDefault = true) {
         this.successCb = cb
@@ -64,10 +123,14 @@ export class AjaxAction extends AjaxOption {
 
     execute() {
         $.ajax({
-            url: this.el.data('action'),
+            url: this.url,
+            method: this.method,
+            ...this.options,
             beforeSend: () => {
-                this.el.attr('disabled', true)
-                this.el.html('Loading...')
+                if (this.el) {
+                    this.el.attr('disabled', true)
+                    this.el.html('Loading...')
+                }
             },
             success: res => {
                 if (this.runDefaultSuccessCb){
@@ -84,8 +147,10 @@ export class AjaxAction extends AjaxOption {
                 this.errorCb && this.errorCb(err)
             },
             complete: () => {
-                this.el.attr('disabled', false)
-                this.el.html(this.label)
+                if (this.el) {
+                    this.el.attr('disabled', false)
+                    this.el.html(this.label)
+                }
             }
         })
     }
@@ -124,9 +189,10 @@ export class HandleFormSubmit extends AjaxOption {
                         // do default
                         modalEl.modal('hide')
                      }
-                     showToast(res?.message)
+                     showToast(res?.status);
                      _this.successCb && _this.successCb(res)
                      if (_this.datatableId) {
+                        
                          window.LaravelDataTables[_this.datatableId].ajax.reload(null, false)
  
                      }
@@ -141,17 +207,25 @@ export class HandleFormSubmit extends AjaxOption {
 
                         showToast('error', message)
                         if (errors) {
-                            let i = 0
-                            for( let [key, value] of Object.entries(errors)) {
-                                const input = $(`[name="${key}"]`)
-                                if (i == 0){
-                                    input.focus()
+                            let focused = false;
+                            for (let [key, value] of Object.entries(errors)) {
+                                let input = $(`[name="${key}"]`);
+
+                                if (!input.length) {
+                                    input = $(`[name="${key}[]"]`);
                                 }
-    
-                                input.addClass('is-invalid').parents('.form-wrapper').append(`<div class="invalid-feedback">${value}</div>`)
-                                i ++;
+                                
+                                if (input.length) {
+                                    if (!focused) {
+                                        input.focus();
+                                        focused = true;
+                                    }
+                                    input.addClass('is-invalid').parents('.form-wrapper')
+                                        .append(`<div class="invalid-feedback">${value}</div>`);
+                                }
                             }
                         }
+
                         
                     }
                     _this.errorCb && _this.errorCb(err)
