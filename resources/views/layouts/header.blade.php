@@ -6,7 +6,7 @@
         </div>
         <div class="header-content">
             <div class="theme-switch-icon"></div>
-            <div class="notification dropdown">
+            {{-- <div class="notification dropdown">
                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="far fa-envelope"></i>
                 </a>
@@ -87,50 +87,39 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
             <div class="notification dropdown">
+                @php
+                    $notifications = notifications()
+                @endphp
                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="far fa-bell"></i>
-                    <span class="badge">12</span>
+                    <span class="badge">{{ $notifications->count() }}</span>
                 </a>
                 <ul class="dropdown-menu medium">
                     <li class="menu-header">
                         <a class="dropdown-item" href="#">Notification</a>
                     </li>
                     <li class="menu-content ps-menu">
-                        <a href="#">
+                        @forelse ($notifications as $item)
+                            
+                        <a href="{{ route('notifications', $item->id) }}">
                             <div class="message-icon text-danger">
                                 <i class="fas fa-exclamation-triangle"></i>
                             </div>
                             <div class="message-content read">
+                                <div class="mb-2 body fw-bold">{{ $item->data['title'] }}</div>
                                 <div class="body">
-                                    There's incoming event, don't miss it!!
+                                    {{ $item->data['body'] }}
                                 </div>
-                                <div class="time">Just now</div>
+                                <div class="time">{{ $item->created_at->diffForHumans() }}</div>
                             </div>
                         </a>
-                        <a href="#">
-                            <div class="message-icon text-info">
-                                <i class="fas fa-info"></i>
+                        @empty
+                            <div href="#" class="my-2 text-center">
+                                <div>Tidak ada notifikasi</div>
                             </div>
-                            <div class="message-content read">
-                                <div class="body">
-                                    Your licence will expired soon
-                                </div>
-                                <div class="time">3 hours ago</div>
-                            </div>
-                        </a>
-                        <a href="#">
-                            <div class="message-icon text-success">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="message-content">
-                                <div class="body">
-                                    Successfully register new user
-                                </div>
-                                <div class="time">8 hours ago</div>
-                            </div>
-                        </a>
+                        @endforelse
                     </li>
                 </ul>
             </div>
@@ -138,9 +127,9 @@
                 <a href="#" class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="label">
                         <span></span>
-                        <div>Admin</div>
+                        <div>{{ user('nama') }}</div>
                     </div>
-                    <img class="img-user" src="../assets/images/avatar1.png" alt="user"srcset="">
+                    {{-- <img class="img-user" src="../assets/images/avatar1.png" alt="user"srcset=""> --}}
                 </a>
                 <ul class="dropdown-menu small">
                     <!-- <li class="menu-header">
@@ -157,11 +146,14 @@
                                 <i class="ti-settings"></i> Setting
                             </div>
                         </a>
-                        <a href="#">
-                            <div class="description">
-                                <i class="ti-power-off"></i> Logout
-                            </div>
-                        </a>
+                        <form method="post" action="{{ route('logout') }}">
+                            @csrf
+                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit()">
+                                <div class="description">
+                                    <i class="ti-power-off"></i> Logout
+                                </div>
+                            </a>
+                        </form>
                     </li>
                 </ul>
             </div>

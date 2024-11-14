@@ -53,7 +53,7 @@
             <li @class(['active' => Str::startsWith(request()->path(), 'hari-libur')])>
                 <a href="{{ url('hari-libur') }}" class="link">
                     <i class="ti-calendar"></i>
-                    <span>Setup Hari Libur</span>
+                    <span>Hari Libur</span>
                 </a>
             </li>
             <li class="menu-category">

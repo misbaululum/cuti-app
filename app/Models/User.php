@@ -5,8 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\CutiTahunan;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -69,5 +71,14 @@ class User extends Authenticatable
             return $query->where('tahun', date('Y'));
         });
     }
+
+    public function cuti(): HasMany
+    {
+        return $this->hasMany(Cuti::class, 'user_id', 'id');
+    }
     
+    public function markAsRead(Model $referensi)
+    {
+        $this->unreadNotifications()->where('data->referensi_id', $referensi->id)->where('data->referensi_type', get_class($referensi))->update(['read_at' => now()]);
+    }
 }

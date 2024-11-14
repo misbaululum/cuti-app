@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('history', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('referensi_id');
-            $table->string('referensi_type');
+            $table->morphs('referensi');
             $table->foreignId('user_id')->constrained('users');
             $table->string('user_approve')->nullable();
             $table->boolean('status_approve')->nullable();

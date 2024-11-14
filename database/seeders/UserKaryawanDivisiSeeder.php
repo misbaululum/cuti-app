@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Divisi;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Divisi;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserKaryawanDivisiSeeder extends Seeder
 {
@@ -22,10 +23,44 @@ class UserKaryawanDivisiSeeder extends Seeder
             'nama' => 'finance',
             'active' => 1
         ]);
+        $kabag_finance = User::factory()->create([
+            'nama' => 'kabag_finance',
+            'email' => 'kabag_finance@example.com',
+        ]);
+
+        $kabag_finance->karyawan()->create([
+            'nama' => $kabag_finance->nama,
+            'divisi_id' => $finance->id,
+            'nama_divisi' => $finance->nama,
+            'status_karyawan' => 'tetap',
+            'tanggal_masuk' => now(),
+            'jenis_kelamin' => 'L',
+        ]);
+
+        $staff_finance = User::factory()->create([
+            'nama' => 'staff_finance',
+            'email' => 'staff_finance@example.com',
+        ]);
+
+        $staff_finance->karyawan()->create([
+            'nama' => $staff_finance->nama,
+            'divisi_id' => $finance->id,
+            'nama_divisi' => $finance->nama,
+            'status_karyawan' => 'tetap',
+            'tanggal_masuk' => now(),
+            'jenis_kelamin' => 'L',
+        ]);
+
+        $staff_finance->atasan()->attach([
+            $kabag_finance->id => ['level' => 1],
+        ]);
+        
         $hrd = Divisi::create([
             'nama' => 'hrd',
             'active' => 1
         ]);
+
+        Role::create(['name' => 'hrd']);
 
         $staff_it = User::factory()->create([
             'nama' => 'staff_it',
@@ -72,6 +107,20 @@ class UserKaryawanDivisiSeeder extends Seeder
             'status_karyawan' => 'tetap',
             'tanggal_masuk' => now(),
             'jenis_kelamin' => 'L',
+        ]);
+
+        $userHrd = User::factory()->create([
+            'nama' => 'hrd',
+            'email' => 'hrd@example.com',
+        ])->assignRole('hrd');
+
+        $userHrd->karyawan()->create([
+           'nama' => $userHrd->nama,
+           'divisi_id' => $hrd->id,
+           'nama_divisi' => $hrd->nama,
+           'status_karyawan' => 'tetap',
+           'tanggal_masuk' => now(),
+           'jenis_kelamin' => 'L', 
         ]);
     }
 }

@@ -57,6 +57,20 @@ export function initDatepicker(selector = '.date', options = {}) {
     return date
 }
 
+
+export function handleNotfication(cb) {
+    const url = new URL(window.location)
+    const params = url.searchParams
+    if (params.get('id')) {
+        (new AjaxAction(`${url.origin + url.pathname}/${params.get('priority') == '1' ? `approve/${params.get('id')}` : params.get('id')}`))
+            .onSuccess(function (res) {
+                cb && cb(res)
+            })
+        
+        .execute()
+    }
+}
+
 export function showToast(type = 'success', message = 'Berhasil Menyimpan Data') {
     iziToast[type]({
         title: 'Info',
@@ -104,10 +118,10 @@ export class AjaxAction extends AjaxOption {
         }
     }
 
-    // setOption(_option) {
-    //     this.options = _option
-    //     return this
-    // }
+    setOption(_option) {
+        this.options = _option
+        return this
+    }
 
     onSuccess(cb, runDefault = true) {
         this.successCb = cb

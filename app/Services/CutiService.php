@@ -10,7 +10,7 @@ class CutiService
     /**
      * Create a new class instance.
      */
-    public function hmin($min = 7, $format = 'd-m-Y')
+    public function hmin($min = 7, $format = 'Y-m-d')
     {
         $min += 1;
         return date_create("+{$min} days")->format($format);
@@ -47,7 +47,7 @@ class CutiService
         $hariLibur = 0;
         
         for ($i = 0; $i < $totalCuti; $i++) {
-            if (in_array($tanggalAwal->modify('+1 days')->format('D'), setupAplikasi('hari_kerja'))) {
+            if (!in_array($tanggalAwal->modify('+1 days')->format('D'), setupAplikasi('hari_kerja'))) {
                 $hariLibur++;
             }
         }

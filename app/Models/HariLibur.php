@@ -19,8 +19,8 @@ class HariLibur extends Model
 {
     return $query->where(function ($query) {
         $query->orWhere(function ($query) {
-            $query->whereDate('tanggal_awal', '>=', convertDate(request('tanggal_awal'), 'Y-m-d'))
-                  ->whereDate('tanggal_akhir', '<=', convertDate(request('tanggal_akhir'), 'Y-m-d'));
+            $query->whereDate('tanggal_akhir', '>=', convertDate(request('tanggal_awal'), 'Y-m-d'))
+                  ->whereDate('tanggal_awal', '<=', convertDate(request('tanggal_akhir'), 'Y-m-d'));
         });
     });
 }

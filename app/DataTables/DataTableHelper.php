@@ -12,7 +12,7 @@ trait DataTableHelper
                 'searchDelay' => 1000,
                 'responsive' => [
                     'details' => [
-                        'display' => 'jQuery.fn.dataTable.Responsive.display.childRowImmediate'
+                        'display' => '$.fn.dataTable.Responsive.display.childRowImmediate'
                     ]
                 ]
             ])

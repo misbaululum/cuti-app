@@ -2,6 +2,7 @@
 
 use App\Models\SetupAplikasi;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 
 if (!function_exists('responseSuccess')) 
 {
@@ -68,5 +69,23 @@ if (!function_exists('setupAplikasi')) {
         }
 
         return $setupAplikasi;
+    }
+}
+
+
+if (!function_exists('numbering')) {
+    function numbering(Model $model, $format, $column = 'nomor', $length = 4)
+    {
+        $model = $model->select(\Illuminate\Support\Facades\DB::raw("MAX($column) as $column"))->where("$column", 'like', "%{$format}%")->orderByDesc('id')->first();
+
+        // PC24110001
+        return $format . sprintf("%0{$length}s", ((int) substr($model->{$column}, strlen($format), $length)) + 1);
+    }
+}
+
+if (!function_exists('notifications')) {
+    function notifications()
+    {
+        return user()->unreadNotifications;
     }
 }

@@ -25,7 +25,6 @@ return new class extends Migration
             $table->boolean('status_approve')->nullable();
             $table->foreignId('user_approve_id')->nullable()->constrained('users');
             $table->string('user_approve')->nullable();
-            $table->date('tanggal');
             $table->timestamps();
         });
     }

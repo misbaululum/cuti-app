@@ -1,6 +1,19 @@
 import $ from 'jquery'
 import '../../vendor/datatable'
-import { AjaxAction, confirmation, HandleFormSubmit, initDatepicker, reloadDatatable, showToast } from '../../lib/utils'
+import { AjaxAction, confirmation, HandleFormSubmit, handleNotfication, initDatepicker, reloadDatatable, showToast } from '../../lib/utils'
+
+$(function() {
+    handleNotfication(res => {
+        (new HandleFormSubmit())
+        .onSuccess(res =>{
+            window.location.href = window.location.origin + `/pengajuan/cuti`
+        })
+        .onError(err => {
+  
+        })
+        .init()
+    }) 
+});
 
 
 $('.main-content').on('click', '[data-action]', function(e) {
@@ -17,7 +30,7 @@ $('.main-content').on('click', '[data-action]', function(e) {
         return
     };
 
-    let countChange = 0;
+
     (new AjaxAction(this))
     .onSuccess(function(res) {
         const startDate = $('[data-hmin]').data('hmin')
@@ -27,7 +40,6 @@ $('.main-content').on('click', '[data-action]', function(e) {
             let tanggal_akhir = $('#tanggal_akhir').val();
             let tanggal_awal = $('#tanggal_awal').val();
 
-            if (countChange > 0) {
                 (new AjaxAction(window.location.origin + `/pengajuan/cuti/hitung-cuti`, {
                     data: {
                         tanggal_awal,
@@ -45,8 +57,6 @@ $('.main-content').on('click', '[data-action]', function(e) {
                     }
                 })
                 .execute()
-            }
-            countChange ++;
         });
 
         const handle = (new HandleFormSubmit())
