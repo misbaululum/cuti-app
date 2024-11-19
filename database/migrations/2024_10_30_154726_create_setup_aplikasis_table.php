@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('setup_aplikasi', function (Blueprint $table) {
             $table->id();
             $table->integer('hmin_cuti');
+            $table->integer('hmin_izin');
             $table->json('hari_kerja');
             $table->timestamps();
         });

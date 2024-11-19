@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\Izin;
 use App\Models\User;
 use Hamcrest\Core\Set;
 use App\Models\HariLibur;
 use App\Models\CutiTahunan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CutiController;
+use App\Http\Controllers\IzinController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DivisiController;
 use Illuminate\Notifications\Notification;
@@ -36,6 +38,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('cuti/approve/{cuti:uuid}', [CutiApproveController::class, 'storeApprove'])->name('cuti.approve.store');
         Route::get('cuti/hitung-cuti', [CutiController::class, 'hitungCuti'])->name('cuti.hitung-cuti');
         Route::resource('cuti', CutiController::class);
+        Route::get('izin/hitung-izin', [IzinController::class, 'hitungIzin'])->name('izin.hitung-izin');
+        Route::resource('izin', IzinController::class);
     });
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('notifications');

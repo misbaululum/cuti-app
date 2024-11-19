@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class SetupAplikasiDataTable extends DataTable
 {
+    use DataTableHelper;
     /**
      * Build the DataTable class.
      *
@@ -34,6 +35,12 @@ class SetupAplikasiDataTable extends DataTable
             }
             return $item;
         })
+        ->editColumn('created_at', function ($row) {
+            return $row->created_at->format('d-m-Y H:i');
+        })
+        ->editColumn('updated_at', function ($row) {
+            return $row->updated_at->format('d-m-Y H:i');
+        })
         ->rawColumns(['action', 'hari_kerja'])
         ->addIndexColumn();
     }
@@ -51,12 +58,7 @@ class SetupAplikasiDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        return $this->builder()
-                    ->setTableId('setupaplikasi-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1);
+        return $this->setHtml('setupaplikasi-table');
     }
 
     /**
@@ -69,6 +71,7 @@ class SetupAplikasiDataTable extends DataTable
             Column::make('id')->hidden(),
             Column::make('hmin_cuti'),
             Column::make('hari_kerja'),
+            Column::make('created_at'),
             Column::make('updated_at'),
             Column::computed('action')
                   ->exportable(false)

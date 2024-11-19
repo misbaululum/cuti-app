@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ListAtasanDataTable;
+use DateTime;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Divisi;
 use Illuminate\Http\Request;
 use App\DataTables\UserDataTable;
 use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Divisi;
-use DateTime;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\DataTables\ListAtasanDataTable;
 
 class UserController extends Controller
 {
@@ -37,7 +38,8 @@ class UserController extends Controller
                 'Laki-laki' => 'L',
                 'Perempuan' => 'P'
             ],
-            'divisi' => Divisi::all()
+            'divisi' => Divisi::all(),
+            'roles' => Role::all()->pluck('id', 'name')
         ]);
     }
 
@@ -51,6 +53,8 @@ class UserController extends Controller
             $user = new User($request->validated());
             $user->password = Hash::make($request->password);
             $user->save();
+
+            $user->roles()->attach($request->roles);
 
             if ($request->has('atasan')) {
                 foreach($request->atasan as $key => $value) {
@@ -107,7 +111,8 @@ class UserController extends Controller
                 'Laki-laki' => 'L',
                 'Perempuan' => 'P'
             ],
-            'divisi' => Divisi::all()
+            'divisi' => Divisi::all(),
+            'roles' => Role::all()->pluck('id', 'name')
         ]);
     }
 
@@ -125,6 +130,8 @@ class UserController extends Controller
 
             $user->fill($validate);
             $user->save();
+            
+            $user->roles()->sync($request->roles);
 
             if ($request->has('atasan')) {
                 foreach($request->atasan as $key => $value) {

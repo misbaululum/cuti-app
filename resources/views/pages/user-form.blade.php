@@ -19,6 +19,13 @@
             <x-forms.radio value="{{ $data->karyawan?->jenis_kelamin }}" :options="$jenisKelamin" label="Jenis Kelamin :" name="jenis_kelamin" />
         </div>
         <div class="col-md-6">
+            <x-forms.select label="Role" data-placeholder="Pilih role" multiple name="roles[]" class="select2" >
+                @foreach ($roles as $key => $value)
+                    <option @selected($data->roles->firstWhere('id', $value) ? true : false) value="{{ $value }}">{{ $key }}</option>
+                @endforeach
+            </x-forms.select>
+        </div>
+        <div class="col-md-6">
             <x-forms.select name="divisi" label="Divisi :">
             @foreach ($divisi as $item)
             <option @selected($data->karyawan?->divisi_id == $item->id) value="{{ $item->id }}">{{ $item->nama }}</option> 

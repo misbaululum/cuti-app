@@ -68,6 +68,9 @@
                     <li @class(['active' => Str::startsWith(request()->path(), 'pengajuan/cuti')])>
                         <a href="{{ url('pengajuan/cuti') }}" class="link"><span>Cuti</span></a>
                     </li>
+                    <li @class(['active' => Str::startsWith(request()->path(), 'pengajuan/izin')])>
+                        <a href="{{ url('pengajuan/izin') }}" class="link"><span>Izin</span></a>
+                    </li>
                 </ul>
             </li>            
             {{-- <li>

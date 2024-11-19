@@ -89,3 +89,11 @@ if (!function_exists('notifications')) {
         return user()->unreadNotifications;
     }
 }
+
+if (!function_exists('hmin')) {
+    function hmin($min = 7, $format = 'Y-m-d')
+    {
+        $min += 1;
+        return date_create("+{$min} days")->format($format);
+    }
+}

@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import '../vendor/datatable'
-import { AjaxAction, confirmation, HandleFormSubmit, initDatepicker, reloadDatatable, showToast } from '../lib/utils'
+import { AjaxAction, confirmation, HandleFormSubmit, initDatepicker, initSelect2, reloadDatatable, showToast } from '../lib/utils'
 
 
 $('.main-content').on('click', '[data-action]', function(e) {
@@ -21,7 +21,7 @@ $('.main-content').on('click', '[data-action]', function(e) {
     (new AjaxAction(this))
     .onSuccess(function(res) {
         initDatepicker();
-
+        initSelect2();
         $('.add-atasan').on('click', function() {
 
             (new AjaxAction(this))

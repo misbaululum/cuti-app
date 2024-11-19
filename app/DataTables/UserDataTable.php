@@ -14,6 +14,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class UserDataTable extends DataTable
 {
+    use DataTableHelper;
     /**
      * Build the DataTable class.
      *
@@ -27,6 +28,15 @@ class UserDataTable extends DataTable
                 $actions['Edit'] = ['action' => route('users.edit', $row->id)]; 
                 $actions['Delete'] = ['action' => route('users.destroy', $row->id), 'method' => 'delete']; 
                 return view('action', compact('actions'));
+            })
+            ->editColumn('roles', function ($row) {
+                return $row->roles->pluck('name')->implode(',');
+            })
+            ->editColumn('created_at', function ($row) {
+                return $row->created_at->format('d-m-Y H:i');
+            })
+            ->editColumn('updated_at', function ($row) {
+                return $row->updated_at->format('d-m-Y H:i');
             })
             ->addIndexColumn();
     }
@@ -44,29 +54,7 @@ class UserDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        return $this->builder()
-        ->parameters([
-            'searchDelay' => 1000,
-            'responsive' => [
-                'details' => [
-                    'display' => '$.fn.dataTable.Responsive.display.childRowImmediate'
-                ]
-            ]
-        ])
-                    ->setTableId('user-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle();
-                    // ->buttons([
-                    //     Button::make('excel'),
-                    //     Button::make('csv'),
-                    //     Button::make('pdf'),
-                    //     Button::make('print'),
-                    //     Button::make('reset'),
-                    //     Button::make('reload')
-                    // ]);
+        return $this->setHtml('user-table');
     }
 
     /**
@@ -78,6 +66,7 @@ class UserDataTable extends DataTable
             Column::make('DT_RowIndex')->title('#')->orderable(false)->searchable(false),
             Column::make('id')->hidden(),
             Column::make('nama'),
+            Column::make('roles'),
             Column::make('email'),
             Column::make('karyawan.nama_divisi')->name('karyawan.nama_divisi')->title('Divisi'),
             Column::make('created_at'),

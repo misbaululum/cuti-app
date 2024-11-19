@@ -14,6 +14,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class DivisiDataTable extends DataTable
 {
+    use DataTableHelper;
     /**
      * Build the DataTable class.
      *
@@ -26,6 +27,12 @@ class DivisiDataTable extends DataTable
                 $actions['Edit'] = ['action' => route('divisi.edit', $row->id)]; 
                 $actions['Delete'] = ['action' => route('divisi.destroy', $row->id), 'method' => 'delete']; 
                 return view('action', compact('actions'));
+            })
+            ->editColumn('created_at', function ($row) {
+                return $row->created_at->format('d-m-Y H:i');
+            })
+            ->editColumn('updated_at', function ($row) {
+                return $row->updated_at->format('d-m-Y H:i');
             })
             ->addIndexColumn();
     }
@@ -43,20 +50,7 @@ class DivisiDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-            return $this->builder()
-            ->parameters([
-                'searchDelay' => 1000,
-                'responsive' => [
-                    'details' => [
-                        'display' => '$.fn.dataTable.Responsive.display.childRowImmediate'
-                    ]
-                ]
-            ])
-                    ->setTableId('divisi-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1);
+            return $this->setHtml('divisi-table');
     }
 
     /**

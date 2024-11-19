@@ -30,6 +30,9 @@ class CutiTahunanDataTable extends DataTable
             ->editColumn('created_at', function ($row) {
                 return $row->created_at->format('d-m-Y H:i');
             })
+            ->editColumn('updated_at', function ($row) {
+                return $row->updated_at->format('d-m-Y H:i');
+            })
             ->addIndexColumn();
     }
 
@@ -64,6 +67,7 @@ class CutiTahunanDataTable extends DataTable
             Column::make('user.nama')->name('user.nama')->title('User'),
             Column::make('tahun'),
             Column::make('total'),
+            Column::make('digunakan'),
             Column::make('created_at'),
             Column::make('updated_at'),
             Column::computed('action')
