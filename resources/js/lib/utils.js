@@ -226,6 +226,8 @@ export class HandleFormSubmit extends AjaxOption {
                                 let input = $(`[name="${key}"]`);
 
                                 if (!input.length) {
+
+                                    // video ke 50 min 11.23
                                     if (key.includes('.')) {
                                         value = value[0].replace(key, key.split('.')[0]);
                                         key = key.split('.')[0];
