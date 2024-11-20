@@ -3,20 +3,26 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class IzinNotification extends Notification
+class IzinNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(private Model $model , private array $message)
     {
-        //
+        $this->model = $model;
+        $this->message = [
+            'referensi_id' => $model->id,
+            'referensi_type' => get_class($this->model),
+            ...$message
+        ];
     }
 
     /**
@@ -26,7 +32,16 @@ class IzinNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
+    }
+
+    public function toDatabase(object $notifiable): array
+    {
+        if (!isset($this->message['priority'])) {
+            $this->message['priority'] = 1;
+        }
+
+        return $this->message;
     }
 
     /**
@@ -35,9 +50,9 @@ class IzinNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('Ada pengajuan izin yang harus diproses dengan nomor ' . $this->model->nomor)
+                    ->action('Proses Pengajuan', url("notifications/". $this->id))
+                    ->line('Terimakasih!');
     }
 
     /**

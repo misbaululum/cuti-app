@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\CutiApproveController;
 use App\Http\Controllers\CutiTahunanController;
+use App\Http\Controllers\IzinApproveController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SetupAplikasiController;
 
@@ -38,6 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('cuti/approve/{cuti:uuid}', [CutiApproveController::class, 'storeApprove'])->name('cuti.approve.store');
         Route::get('cuti/hitung-cuti', [CutiController::class, 'hitungCuti'])->name('cuti.hitung-cuti');
         Route::resource('cuti', CutiController::class);
+        Route::get('izin/approve/{izin:uuid}', [IzinApproveController::class, 'show'])->name('izin.approve.show');
+        Route::put('izin/approve/{izin:uuid}', [IzinApproveController::class, 'storeApprove'])->name('izin.approve.store');
         Route::get('izin/hitung-izin', [IzinController::class, 'hitungIzin'])->name('izin.hitung-izin');
         Route::resource('izin', IzinController::class);
     });

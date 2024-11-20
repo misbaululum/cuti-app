@@ -42,8 +42,10 @@ if (!function_exists('responseError'))
 
 if (!function_exists('convertDate')) 
 {
-    function convertDate($date, $format = 'd-m-Y'): string {
-     return date_create($date)->format($format);   
+    function convertDate($date, $format = 'd-m-Y')
+    {
+        if (!$date) return null;
+        return date_create($date)->format($format);   
     }
 }
 

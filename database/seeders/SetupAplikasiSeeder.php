@@ -13,6 +13,6 @@ class SetupAplikasiSeeder extends Seeder
      */
     public function run(): void
     {
-        SetupAplikasi::create(['hmin_cuti' => 7, 'hmin_izin' => 1, 'hari_kerja' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']]);
+        SetupAplikasi::create(['hmin_cuti' => 7, 'hmin_izin' => 7, 'hari_kerja' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']]);
     }
 }

@@ -226,12 +226,16 @@ export class HandleFormSubmit extends AjaxOption {
                                 let input = $(`[name="${key}"]`);
 
                                 if (!input.length) {
+                                    if (key.includes('.')) {
+                                        value = value[0].replace(key, key.split('.')[0]);
+                                        key = key.split('.')[0];
+                                    }
                                     input = $(`[name="${key}[]"]`);
                                 }
                                 
                                 if (input.length) {
                                     if (!focused) {
-                                        input.focus();
+                                        input.trigger('focus');
                                         focused = true;
                                     }
                                     input.addClass('is-invalid').parents('.form-wrapper')

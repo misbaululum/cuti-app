@@ -70,6 +70,7 @@ class SetupAplikasiDataTable extends DataTable
             Column::make('DT_RowIndex')->title('#')->searchable(false)->orderable(false),
             Column::make('id')->hidden(),
             Column::make('hmin_cuti'),
+            Column::make('hmin_izin'),
             Column::make('hari_kerja'),
             Column::make('created_at'),
             Column::make('updated_at'),

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasTransaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,11 +11,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cuti extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTransaction;
 
     protected $table = 'cuti';
 
     protected $guarded = ['id'];
+    protected $route = 'pengajuan.cuti.index';
+    protected $notificationTitle = 'Pengajuan cuti';
 
     // public function cutiTahunanActive()
     // {
@@ -26,37 +29,37 @@ class Cuti extends Model
         'tanggal_akhir' => 'date'
     ];
 
-    public function history(): MorphMany
-    {
-        return $this->morphMany(History::class, 'referensi');
-    }
+    // public function history(): MorphMany
+    // {
+    //     return $this->morphMany(History::class, 'referensi');
+    // }
 
-    public function latestHistory()
-    {
-        return $this->morphOne(History::class, 'referensi')->ofMany(['tanggal' => 'max']);
-    }
+    // public function latestHistory()
+    // {
+    //     return $this->morphOne(History::class, 'referensi')->ofMany(['tanggal' => 'max']);
+    // }
 
     public function sisaCuti(): Attribute
     {
         return Attribute::make(get: fn ($value, array $attributes) => $attributes['sisa_cuti_awal'] - $attributes['total_cuti']);
     }
 
-    public function routeNotification(?int $priority = 1, $ref = 'notification')
-    {
-        return route('pengajuan.cuti.index', ['id' => $this->uuid ?? $this->id, 'priority' => $priority, 'ref' => $ref]);
-    }
+    // public function routeNotification(?int $priority = 1, $ref = 'notification')
+    // {
+    //     return route('pengajuan.cuti.index', ['id' => $this->uuid ?? $this->id, 'priority' => $priority, 'ref' => $ref]);
+    // }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    // public function user(): BelongsTo
+    // {
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
 
-    public function notificationTitle(): string{
-        return 'Pengajuan Cuti';
-    }
+    // public function notificationTitle(): string{
+    //     return 'Pengajuan Cuti';
+    // }
 
-    public function getRouteKeyName()
-    {
-        return 'uuid';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'uuid';
+    // }
 }

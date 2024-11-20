@@ -52,7 +52,7 @@ class IzinController extends Controller
         return view('pages.pengajuan.izin-form', [
             'data' => new Izin(),
             'action' => route('pengajuan.izin.store'),
-            'hmin' => hmin(setupAplikasi('hmin_izin')),
+            'hmin' => date('d-m-Y')
         ]);
     }
 
@@ -135,7 +135,10 @@ class IzinController extends Controller
      */
     public function show(Izin $izin)
     {
-        //
+        return view('pages.pengajuan.izin-form-detail', [
+            'data' => $izin,
+            'action' => null
+         ]);
     }
 
     /**
@@ -143,15 +146,54 @@ class IzinController extends Controller
      */
     public function edit(Izin $izin)
     {
-        //
+        return view('pages.pengajuan.izin-form', [
+            'data' => $izin,
+            'action' => route("pengajuan.izin.update", $izin->uuid),
+            'hmin' => date('d-m-Y')
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Izin $izin)
+    public function update(IzinRequest $request, Izin $izin)
     {
-        //
+        DB::beginTransaction();
+        try {
+            
+            if (!is_null($izin->status_approve)) {
+                abort(403);
+            }
+    
+            $request->fillData($izin);
+            $izin->fill([
+                'total_izin' => $this->service->hitungIzin($request)
+            ]);
+    
+            $izin->save();
+    
+            if ($request->has('foto')) {
+                $izin->foto->map(function($item) {
+                    Storage::delete('public/images/izin/'. $item->file_name);
+                });
+    
+                $izin->foto()->delete();
+    
+                foreach($request->foto as $foto) {
+                    $filename = user('id').'izin'. rand().'.'. $foto->getClientOriginalExtension();
+                    $foto->storeAs('public/images/izin', $filename);
+                    $izin->foto()->create(['file_name' => $filename]);
+                }
+            }
+    
+            DB::commit();
+    
+            return responseSuccess();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return responseError($th);
+            
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ class CutiDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function($row) {
                 $actions['Detail'] = ['action' => route('pengajuan.cuti.show', $row->uuid)];
-                if ($row->status_approve == null && $row->user_id == user('id')) {
+                if ($row->status_approve === null && $row->user_id == user('id')) {
                     $actions['Edit'] = ['action' => route('pengajuan.cuti.edit', $row->uuid)];
                 }
                 if ($row->latestHistory->next_approve_id == user('id')) {

@@ -17,6 +17,16 @@
         <div class="col-md-12">
             <x-forms.input type="file" name="foto[]" label="Foto" multiple />
         </div>
+        @if (count($data->foto))
+        <div class="row mb-3">
+            @foreach ($data->foto as $foto)
+            <div class="col-md-6">
+                <img style="width:70%; height:auto;" class="rounded-2" src="{{ asset('storage/images/izin/'.$foto->file_name) }}" alt="">
+
+            </div>
+            @endforeach
+        </div>
+        @endif
         <div class="col-md-12">
             <x-forms.textarea name="keterangan" label="Keterangan" value="{{ $data->keterangan }}" />
         </div>

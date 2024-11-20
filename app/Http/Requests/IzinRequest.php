@@ -32,8 +32,9 @@ class IzinRequest extends FormRequest
             'keterangan' => 'required',
             'jenis' => 'required|in:sakit,izin',
             'foto' => [Rule::requiredIf(function() {
-                return request('jenis') == 'sakit';
+                return request('jenis') == 'sakit' && request()->routeIs('pengajuan.izin.store');
             })],
+            'foto.*' => ['bail','image', 'mimes:jpg,jpeg,png', 'max:15360']
         ];
     }
 }

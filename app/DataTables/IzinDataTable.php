@@ -24,12 +24,12 @@ class IzinDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function($row) {
-                $actions['Detail'] = ['action' => route('pengajuan.cuti.show', $row->uuid)];
-                if ($row->status_approve == null && $row->user_id == user('id')) {
-                    $actions['Edit'] = ['action' => route('pengajuan.cuti.edit', $row->uuid)];
+                $actions['Detail'] = ['action' => route('pengajuan.izin.show', $row->uuid)];
+                if ($row->status_approve === null && $row->user_id == user('id')) {
+                    $actions['Edit'] = ['action' => route('pengajuan.izin.edit', $row->uuid)];
                 }
                 if ($row->latestHistory->next_approve_id == user('id')) {
-                    $actions['Approve'] = ['action' => route('pengajuan.cuti.approve.show', $row->uuid)];
+                    $actions['Approve'] = ['action' => route('pengajuan.izin.approve.show', $row->uuid)];
                 }
                 return view('action', compact('actions'));
             })

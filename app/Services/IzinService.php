@@ -15,7 +15,7 @@ class IzinService
         $totalCuti = $tanggalAwal->diff($tanggalAkhir)->format('%a') + 1;
 
         // cek hmin
-        if ($tanggalAwal < date_create(hmin(setupAplikasi('hmin_izin')))) throw new \Exception('Pengajuan izin min h-'.setupAplikasi('hmin_izin'));
+        if ($request->jenis == 'izin' && $tanggalAwal < date_create(hmin(setupAplikasi('hmin_izin')))) throw new \Exception('Pengajuan izin min h-'.setupAplikasi('hmin_izin'));
 
         // hitung hari besar di hari kerja
         $hariLiburNasional = 0;
