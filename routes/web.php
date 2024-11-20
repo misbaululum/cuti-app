@@ -16,6 +16,8 @@ use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\CutiApproveController;
 use App\Http\Controllers\CutiTahunanController;
 use App\Http\Controllers\IzinApproveController;
+use App\Http\Controllers\LaporanCutiController;
+use App\Http\Controllers\LaporanIzinController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SetupAplikasiController;
 
@@ -43,6 +45,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('izin/approve/{izin:uuid}', [IzinApproveController::class, 'storeApprove'])->name('izin.approve.store');
         Route::get('izin/hitung-izin', [IzinController::class, 'hitungIzin'])->name('izin.hitung-izin');
         Route::resource('izin', IzinController::class);
+    });
+    Route::group(['prefix' => 'laporan', 'as' => 'laporan.'], function() {
+        Route::get('cuti', LaporanCutiController::class);
+        Route::get('izin', LaporanIzinController::class);
     });
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('notifications');

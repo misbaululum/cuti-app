@@ -18,44 +18,59 @@
     <div class="sidebar-content">
         <ul>
             <li>
-                <a href="index.html" class="link">
+                <a href="{{ url('/dashboard') }}" class="link">
                     <i class="ti-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
+            @can('read konfigurasi')
             <li class="menu-category">
                 <span class="text-uppercase">Konfigurasi</span>
             </li>
+                
+            @endcan
+            @can('read users')
             <li @class(['active' => Str::startsWith(request()->path(), 'users')])>
                 <a href="{{ url('users') }}" class="link">
                     <i class="ti-user"></i>
                     <span>Users</span>
                 </a>
             </li>
+            @endcan
+            @can('read divisi')
             <li @class(['active' => Str::startsWith(request()->path(), 'divisi')])>
                 <a href="{{ url('divisi') }}" class="link">
                     <i class="ti-package"></i>
                     <span>Divisi</span>
                 </a>
             </li>
+            @endcan
+            @can('read cuti-tahunan')
             <li @class(['active' => Str::startsWith(request()->path(), 'cuti-tahunan')])>
                 <a href="{{ url('cuti-tahunan') }}" class="link">
                     <i class="ti-notepad"></i>
                     <span>Cuti Tahunan</span>
                 </a>
             </li>
+            @endcan
+            @can('read setup-aplikasi')
             <li @class(['active' => Str::startsWith(request()->path(), 'setup-aplikasi')])>
                 <a href="{{ url('setup-aplikasi') }}" class="link">
                     <i class="ti-settings"></i>
                     <span>Setup Aplikasi</span>
                 </a>
             </li>
+                
+            @endcan
+            @can('read hari-libur')
             <li @class(['active' => Str::startsWith(request()->path(), 'hari-libur')])>
                 <a href="{{ url('hari-libur') }}" class="link">
                     <i class="ti-calendar"></i>
                     <span>Hari Libur</span>
                 </a>
             </li>
+                
+            @endcan
             <li class="menu-category">
                 <span class="text-uppercase">Transaksi</span>
             </li>
@@ -72,7 +87,27 @@
                         <a href="{{ url('pengajuan/izin') }}" class="link"><span>Izin</span></a>
                     </li>
                 </ul>
-            </li>            
+            </li>
+            @can('read laporan')
+            <li @class(['active open' => Str::startsWith(request()->path(), 'laporan')])>
+                <a href="#" class="main-menu has-dropdown">
+                    <i class="ti-printer"></i>
+                    <span>Laporan</span>
+                </a>
+                <ul @class(['sub-menu', 'expand' => Str::startsWith(request()->path(), 'laporan')])>
+                    @can('read laporan/cuti')
+                    <li @class(['active' => Str::startsWith(request()->path(), 'laporan/cuti')])>
+                        <a href="{{ url('laporan/cuti') }}" class="link"><span>Cuti</span></a>
+                    </li>
+                    @endcan
+                    @can('read laporan/izin')
+                    <li @class(['active' => Str::startsWith(request()->path(), 'laporan/izin')])>
+                        <a href="{{ url('laporan/izin') }}" class="link"><span>Izin</span></a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>               
+            @endcan
             {{-- <li>
                 <a href="#" class="main-menu has-dropdown">
                     <i class="ti-desktop"></i>

@@ -87,20 +87,27 @@ class HariLiburController extends Controller
      */
     public function update(HariLiburRequest $request, HariLibur $hariLibur)
     {
-        if ($request->has('delete')) {
-            $hariLibur->delete();
-        } else {
-            if ($request->ref == 'modify') {
-                $tanggalAkhir = Carbon::create($request->input('tanggal_akhir'))->subDay()->format('Y-m-d');
-                $request->request->set('tanggal_akhir', $tanggalAkhir);
+        try {
+            if (user()->cannot('update', $hariLibur)) throw new \Exception('Anda tidak memiliki izin untuk mengedit data ini.');
+            if ($request->has('delete')) {
+                $hariLibur->delete();
+            } else {
+                if ($request->ref == 'modify') {
+                    $tanggalAkhir = Carbon::create($request->input('tanggal_akhir'))->subDay()->format('Y-m-d');
+                    $request->request->set('tanggal_akhir', $tanggalAkhir);
+                }
+    
+                // Mengisi data dengan menggunakan HariLiburRequest
+                $request->fillData($hariLibur);
+                $hariLibur->save();
             }
-
-            // Mengisi data dengan menggunakan HariLiburRequest
-            $request->fillData($hariLibur);
-            $hariLibur->save();
+    
+            return responseSuccess();
+            
+        } catch (\Throwable $th) {
+            return responseError($th);
+            
         }
-
-        return responseSuccess();
     }
 
 
