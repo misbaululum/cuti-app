@@ -76,9 +76,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cuti::class, 'user_id', 'id');
     }
+
+    public function izin(): HasMany
+    {
+        return $this->hasMany(Izin::class, 'user_id', 'id');
+    }
     
     public function markAsRead(Model $referensi)
     {
         $this->unreadNotifications()->where('data->referensi_id', $referensi->id)->where('data->referensi_type', get_class($referensi))->update(['read_at' => now()]);
     }
+
 }

@@ -35,4 +35,9 @@ class Izin extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function foto(): MorphMany
+    {
+        return $this->morphMany(Foto::class, 'referensi');
+    }
+
 }
