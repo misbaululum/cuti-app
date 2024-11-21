@@ -10,19 +10,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="antialiased bg-gray-100 relative">
-
-    {{-- <!-- Background SVG -->
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-        <svg 
-            class="w-full h-auto" 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 1440 320">
-            <path fill="#93c5fd" fill-opacity="1" 
-                d="M0,256L48,224C96,192,192,128,288,122.7C384,117,480,171,576,192C672,213,768,203,864,176C960,149,1056,107,1152,101.3C1248,96,1344,128,1392,144L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-            </path>
-        </svg>
-    </div> --}}
-
     <div class="min-h-screen flex flex-col items-center justify-center relative z-10">
         <!-- Logo -->
         <div class="text-center mb-4 pt-8">

@@ -10,11 +10,13 @@
         </a>
     </div> -->
     <div class="sidebar-header">
-        <div class="text">CP</div>
+        <div class="logo">
+            <img src="{{ asset('favicon.png') }}" alt="Logo CP" style="max-width: 45%; height: auto;">
+        </div>
         <div class="close-sidebar action-toggle">
             <i class="ti-close"></i>
         </div>
-    </div>
+    </div>    
     <div class="sidebar-content">
         <ul>
             <li>
@@ -108,6 +110,15 @@
                 </ul>
             </li>               
             @endcan
+            <li>
+                <form method="post" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit()" class="link">
+                        <i class="ti-power-off"></i>
+                        <span>Logout</span>
+                    </a>
+                </form>
+            </li>
             {{-- <li>
                 <a href="#" class="main-menu has-dropdown">
                     <i class="ti-desktop"></i>
