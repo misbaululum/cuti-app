@@ -33,6 +33,13 @@ class CutiDataTable extends DataTable
                 if ($row->latestHistory->next_approve_id == user('id')) {
                     $actions['Approve'] = ['action' => route('pengajuan.cuti.approve.show', $row->uuid)];
                 }
+
+                if (is_null($row->latestHistory->next_approve)) {
+                    $actions['Download PDF'] = [
+                        'action' => route('pengajuan.cuti.generatePDF', $row->uuid)
+                    ];
+                }
+                
                 return view('action', compact('actions'));
             })
             ->editColumn('tanggal_awal', fn ($row) => $row->tanggal_awal->format('d-m-Y'))
