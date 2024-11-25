@@ -645,9 +645,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="border border-gray-300 p-2">{{ $data->tanggal_awal->format('d-m-Y') }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data->tanggal_akhir->format('d-m-Y') }}</td>
-                    <td class="border border-gray-300 p-2"></td>
+                    <td class="border border-gray-300 p-2 text-center">{{ $data->tanggal_awal->format('d-m-Y') }}</td>
+                    <td class="border border-gray-300 p-2 text-center">{{ $data->tanggal_akhir->format('d-m-Y') }}</td>
+                    <td class="border border-gray-300 p-2 text-center">{{ round((strtotime($data->tanggal_akhir) - strtotime($data->tanggal_awal)) / (60 * 60 * 24)) }}</td>
                     <td class="border border-gray-300 p-2"><span class="border-b-2 border-black">Hak Cuti Tahunan </span><br> Annual Leave</td>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->sisa_cuti_awal }}</td>
                 </tr>
@@ -667,7 +667,7 @@
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2"></td>
-                    <td class="border border-gray-300 p-2">/td>
+                    <td class="border border-gray-300 p-2"></td>
                     <td class="border border-gray-300 p-2"></td>
                     <td class="border border-gray-300 p-2"><span class="border-b-2 border-black">Sisa Cuti </span><br> Before of leave</td>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->sisa_cuti }}</td>
