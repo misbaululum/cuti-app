@@ -645,8 +645,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="border border-gray-300 p-2">{{ tanggal_awal->format('d-m-Y') }}</td>
-                    <td class="border border-gray-300 p-2">{{ date('d F Y', strtotime($data->tanggal_akhir)) }}</td>
+                    <td class="border border-gray-300 p-2">{{ $data->tanggal_awal->format('d-m-Y') }}</td>
+                    <td class="border border-gray-300 p-2">{{ $data->tanggal_akhir->format('d-m-Y') }}</td>
                     <td class="border border-gray-300 p-2"></td>
                     <td class="border border-gray-300 p-2"><span class="border-b-2 border-black">Hak Cuti Tahunan </span><br> Annual Leave</td>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->sisa_cuti_awal }}</td>
