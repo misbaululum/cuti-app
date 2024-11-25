@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use App\Notifications\CutiNotification;
 use Illuminate\Support\Facades\Notification;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class CutiController extends Controller
 {
 
@@ -135,6 +137,17 @@ class CutiController extends Controller
            'data' => $cuti,
            'action' => null
         ]);
+    }
+
+    public function generatePDF(Cuti $cuti)
+    {
+        $pdf = PDF::loadView('pages.pengajuan.cuti-pdf', [
+            'data' => $cuti,
+            'action' => null
+        ])->setPaper('A4', 'portrait');
+
+        return $pdf->download('application.pdf'); // Memaksa download PDF
+        // return $pdf->stream(); // Menampilkan PDF di browser jika tidak ada 'download' parameter
     }
 
     /**
