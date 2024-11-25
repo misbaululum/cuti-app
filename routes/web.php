@@ -40,7 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('cuti/approve/{cuti:uuid}', [CutiApproveController::class, 'show'])->name('cuti.approve.show');
         Route::put('cuti/approve/{cuti:uuid}', [CutiApproveController::class, 'storeApprove'])->name('cuti.approve.store');
         Route::get('cuti/hitung-cuti', [CutiController::class, 'hitungCuti'])->name('cuti.hitung-cuti');
+        
         Route::resource('cuti', CutiController::class);
+        Route::get('cuti/{cuti:uuid}/generate-pdf', [CutiController::class, 'generatePDF'])->name('cuti.generatePDF'); // GENERATE PDF
+        
         Route::get('izin/approve/{izin:uuid}', [IzinApproveController::class, 'show'])->name('izin.approve.show');
         Route::put('izin/approve/{izin:uuid}', [IzinApproveController::class, 'storeApprove'])->name('izin.approve.store');
         Route::get('izin/hitung-izin', [IzinController::class, 'hitungIzin'])->name('izin.hitung-izin');
