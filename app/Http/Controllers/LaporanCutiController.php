@@ -15,7 +15,7 @@ class LaporanCutiController extends Controller
         $data = [];
         if ($request->tanggal_awal && $request->tanggal_akhir) {
             $data = Cuti::query()
-            ->select('id', 'total_cuti', 'status_approve', 'user_input')
+            ->select('id', 'total_cuti', 'status_approve', 'user_input', 'tanggal_awal', 'tanggal_akhir', 'nomor')
             ->where(function($query) {
                 $query->whereDate('tanggal_akhir', '>=', convertDate(request('tanggal_awal'), 'Y-m-d'))
                       ->whereDate('tanggal_awal', '<=', convertDate(request('tanggal_akhir'), 'Y-m-d'));

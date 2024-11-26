@@ -20,14 +20,26 @@
                                 <table class="table datatable" style="width:100%;">
                                     <thead>
                                         <tr>
+                                            <th>Nomor</th>
                                             <th>Nama</th>
+                                            <th>Tanggal Awal</th>
+                                            <th>Tanggal Akhir</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $key => $item)
+                                        @foreach ($data as $key => $items)
+                                        @php
+                                            // Ambil tanggal dari item pertama (karena semua item memiliki tanggal yang sama)
+                                            $tanggalAwal = \Carbon\Carbon::parse($items->first()->tanggal_awal)->format('d-m-Y');
+                                            $tanggalAkhir = \Carbon\Carbon::parse($items->first()->tanggal_akhir)->format('d-m-Y');
+                                            $nomor = $items->first()->nomor;
+                                        @endphp
                                         <tr>
+                                            <td>{{ $nomor }}</td>
                                             <td>{{ $key }}</td>
+                                            <td>{{ $tanggalAwal }}</td>
+                                            <td>{{ $tanggalAkhir }}</td>
                                             <td>{{ $item->sum('total_izin') }}</td>
                                         </tr>
                                             
