@@ -75,13 +75,34 @@ if (!function_exists('setupAplikasi')) {
 }
 
 
-if (!function_exists('numbering')) {
-    function numbering(Model $model, $format, $column = 'nomor', $length = 4)
-    {
-        $model = $model->select(\Illuminate\Support\Facades\DB::raw("MAX($column) as $column"))->where("$column", 'like', "%{$format}%")->orderByDesc('id')->first();
+// if (!function_exists('numbering')) {
+//     function numbering(Model $model, $format, $column = 'nomor', $length = 4)
+//     {
+//         $model = $model->select(\Illuminate\Support\Facades\DB::raw("MAX($column) as $column"))->where("$column", 'like', "%{$format}%")->orderByDesc('id')->first();
 
-        // PC24110001
-        return $format . sprintf("%0{$length}s", ((int) substr($model->{$column}, strlen($format), $length)) + 1);
+//         // PC24110001
+//         return $format . sprintf("%0{$length}s", ((int) substr($model->{$column}, strlen($format), $length)) + 1);
+//     }
+// }
+
+if (!function_exists('numbering')) {
+    function numbering(Model $model, $format, $column = 'nomor', $length = 6)
+    {
+        // Cari data terakhir dengan nomor sesuai format
+        $model = $model->where($column, 'like', "{$format}%")
+            ->orderByDesc('id')
+            ->first([$column]);
+
+        if (!$model) {
+            // Jika tidak ada nomor sebelumnya, mulai dari 1
+            return $format . sprintf("%0{$length}s", 1);
+        }
+
+        // Ekstrak angka dari kolom nomor
+        $lastNumber = (int) substr($model->{$column}, strlen($format), $length);
+
+        // Buat nomor baru
+        return $format . sprintf("%0{$length}s", $lastNumber + 1);
     }
 }
 

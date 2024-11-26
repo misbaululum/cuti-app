@@ -143,6 +143,7 @@ class CutiController extends Controller
     {
         $pdf = PDF::loadView('pages.pengajuan.cuti-pdf', [
             'data' => $cuti,
+            'date' => date('d-m-Y'),
             'action' => null
         ])->setPaper('A4', 'portrait');
 

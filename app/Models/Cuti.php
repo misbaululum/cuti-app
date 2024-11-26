@@ -62,4 +62,29 @@ class Cuti extends Model
     // {
     //     return 'uuid';
     // }
+
+    // Relasi ke model User untuk approver
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approve_by'); // Kolom foreign key: approve_by
+    }
+
+    // Accessor untuk mendapatkan nama approver
+    public function getNamaApproveAttribute()
+    {
+        return $this->approver ? $this->approver->name : 'Tidak Diketahui'; // Default jika approver kosong
+    }
+
+    // Relasi untuk mendapatkan atasan yang akan menyetujui selanjutnya
+    public function nextApprover()
+    {
+        return $this->belongsTo(User::class, 'next_approve_id'); // Kolom foreign key: next_approve_id
+    }
+
+    // // Accessor untuk mendapatkan nama atasan yang akan approve selanjutnya
+    // public function getNextApproveAttribute()
+    // {
+    //     return $this->nextApprover ? $this->nextApprover->name : 'Tidak Diketahui'; // Default jika next approver kosong
+    // }
+
 }

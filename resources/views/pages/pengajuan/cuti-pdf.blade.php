@@ -586,7 +586,7 @@
                         <span class="w-[6rem] underline decoration-black decoration-2">Tanggal</span>
                         <span class="ml-1">:</span>
                     </label>
-                    <label class="font-semibold"></label>
+                    <label class="font-semibold">{{ $date }}</label>
                 </div>
                 <span class="text-sm">Date</span>
             </div>
@@ -606,7 +606,7 @@
                         <span class="w-[6rem] underline decoration-black decoration-2">Bagian</span>
                         <span class="ml-1">:</span>
                     </label>
-                    <label class="font-semibold">IT</label>
+                    <label class="font-semibold">{{ $data->karyawan?->divisi?->nama }}</label>
                 </div>
                 <span class="text-sm">Departement</span>
             </div>
@@ -647,7 +647,7 @@
                 <tr>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->tanggal_awal->format('d-m-Y') }}</td>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->tanggal_akhir->format('d-m-Y') }}</td>
-                    <td class="border border-gray-300 p-2 text-center">{{ round((strtotime($data->tanggal_akhir) - strtotime($data->tanggal_awal)) / (60 * 60 * 24)) }}</td>
+                    <td class="border border-gray-300 p-2 text-center">{{ $data->total_cuti }}</td>
                     <td class="border border-gray-300 p-2"><span class="border-b-2 border-black">Hak Cuti Tahunan </span><br> Annual Leave</td>
                     <td class="border border-gray-300 p-2 text-center">{{ $data->sisa_cuti_awal }}</td>
                 </tr>
@@ -663,7 +663,7 @@
                     <td class="border border-gray-300 p-2"></td>
                     <td class="border border-gray-300 p-2"></td>
                     <td class="border border-gray-300 p-2"><span class="border-b-2 border-black">Cuti yang akan diambil </span><br> Leave to be taken</td>
-                    <td class="border border-gray-300 p-2"></td>
+                    <td class="border border-gray-300 p-2 text-center">{{ $data->total_cuti }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2"></td>
@@ -680,7 +680,7 @@
                 <p class="font-semibold"><span class="border-b-2 border-black">Tanda tangan pemohon</span></p>
                 <p class="text-sm">Signature</p>
                 <br>
-                <p class="font-semibold"><span class="">Nama</span></p>
+                <p class="font-semibold"><span class="">{{ $data->user_input }}</span></p>
                 <hr class="mx-auto w-3/4 border-t border-gray-400">
                 <p class="text-sm">Karyawan/Employee</p>
             </div>
@@ -688,18 +688,39 @@
                 <p class="font-semibold"><span class="border-b-2 border-black">Disetujui</span></p>
                 <p class="text-sm">Approved by</p>
                 <br>
-                <p class="font-semibold"><span class="">Nama</span></p>
+                <p class="font-semibold">
+                    @if ($data->status_approve == 1) <!-- Jika status disetujui -->
+                        @if ($data->next_approve) <!-- Jika ada atasan yang menyetujui -->
+                            Disetujui oleh: {{ $data->next_approve }} <!-- Nama atasan yang menyetujui -->
+                        @else
+                            Disetujui oleh: {{ $data->user_approve }} <!-- Nama user yang menyetujui -->
+                        @endif
+                    @else
+                        Belum Disetujui
+                    @endif
+                </p>
                 <hr class="mx-auto w-3/4 border-t border-gray-400">
                 <p class="text-sm">Departemen Head</p>
             </div>
+            
             <div>
                 <p class="font-semibold"><span class="border-b-2 border-black">Mengetahui</span></p>
                 <p class="text-sm">Noticed by</p>
                 <br>
-                <p class="font-semibold"><span class="">Nama</span></p>
+                <p class="font-semibold">
+                    @if ($data->status_approve == 1) <!-- Jika status disetujui -->
+                        @if ($data->next_approve) <!-- Jika ada atasan yang menyetujui -->
+                            Disetujui oleh: {{ $data->next_approve }} <!-- Nama atasan yang menyetujui -->
+                        @else
+                            Disetujui oleh: {{ $data->user_approve }} <!-- Nama user yang menyetujui -->
+                        @endif
+                    @else
+                        Belum Disetujui
+                    @endif
+                </p>
                 <hr class="mx-auto w-3/4 border-t border-gray-400">
                 <p class="text-sm">Personalia & Admin. Dept</p>
-            </div>
+            </div>                        
         </div>
     </div>
 </body>
