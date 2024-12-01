@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuti;
+use App\Exports\CutiExport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanCutiController extends Controller
 {
@@ -30,4 +33,21 @@ class LaporanCutiController extends Controller
             'data' => $data
         ]);
     }
+
+    public function export(Request $request)
+    {
+        // Ambil parameter tanggal dari request
+        $tanggal_awal = $request->tanggal_awal;
+        $tanggal_akhir = $request->tanggal_akhir;
+    
+        // Pastikan tanggal dalam format yang benar
+        $tanggal_awal = Carbon::createFromFormat('d-m-Y', $tanggal_awal)->format('Y-m-d');
+        $tanggal_akhir = Carbon::createFromFormat('d-m-Y', $tanggal_akhir)->format('Y-m-d');
+    
+        return Excel::download(
+            new CutiExport($tanggal_awal, $tanggal_akhir),
+            'cuti-' . Carbon::now()->timestamp . '.xlsx'
+        );
+    }
+    
 }

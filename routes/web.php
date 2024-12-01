@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::group(['prefix' => 'laporan', 'as' => 'laporan.'], function() {
         Route::get('cuti', LaporanCutiController::class);
+        Route::get('cuti/export', [LaporanCutiController::class, 'export'])->name('cuti.export');
         Route::get('izin', LaporanIzinController::class);
     });
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');

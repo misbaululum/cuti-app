@@ -12,6 +12,12 @@
                             <div class="mb-3">
                                 <button class="btn btn-primary">Proses</button>
                             </div>
+                            <div class="mb-3">
+                                <a href="{{ route('laporan.cuti.export', ['tanggal_awal' => request('tanggal_awal'), 'tanggal_akhir' => request('tanggal_akhir')]) }}" 
+                                   class="btn btn-success {{ request('tanggal_awal') && request('tanggal_akhir') ? '' : 'd-none' }}">
+                                   Export Excel
+                                </a>
+                            </div>                            
                         </form>
                     </div>
                     <div class="col-12">
