@@ -586,7 +586,7 @@
                         <span class="w-[6rem] underline decoration-black decoration-2">Tanggal</span>
                         <span class="ml-1">:</span>
                     </label>
-                    <label class="font-semibold">{{ $date }}</label>
+                    <label class="font-semibold">{{ $data->updated_at->format('d-m-Y') }}</label>
                 </div>
                 <span class="text-sm">Date</span>
             </div>
@@ -689,40 +689,30 @@
                 <p class="text-sm">Approved by</p>
                 <br>
                 <p class="font-semibold">
-                    @if ($data->status_approve == 1) <!-- Jika status disetujui -->
-                        @if ($data->next_approve) <!-- Jika ada atasan yang menyetujui -->
-                            Disetujui oleh: {{ $data->next_approve }} <!-- Nama atasan yang menyetujui -->
-                        @else
-                            Disetujui oleh: {{ $data->user_approve }} <!-- Nama user yang menyetujui -->
-                        @endif
-                    @else
-                        Belum Disetujui
-                    @endif
+                    {{ $data->user_approve }}
                 </p>
                 <hr class="mx-auto w-3/4 border-t border-gray-400">
                 <p class="text-sm">Departemen Head</p>
             </div>
-            
+
             <div>
                 <p class="font-semibold"><span class="border-b-2 border-black">Mengetahui</span></p>
                 <p class="text-sm">Noticed by</p>
                 <br>
                 <p class="font-semibold">
-                    @if ($data->status_approve == 1) <!-- Jika status disetujui -->
-                        @if ($data->next_approve) <!-- Jika ada atasan yang menyetujui -->
-                            Disetujui oleh: {{ $data->next_approve }} <!-- Nama atasan yang menyetujui -->
-                        @else
-                            Disetujui oleh: {{ $data->user_approve }} <!-- Nama user yang menyetujui -->
-                        @endif
-                    @else
-                        Belum Disetujui
-                    @endif
+                    {{ $approver2->user_approve ?? 'Tidak Diketahui' }}
                 </p>
                 <hr class="mx-auto w-3/4 border-t border-gray-400">
                 <p class="text-sm">Personalia & Admin. Dept</p>
-            </div>                        
+            </div>
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
 </body>
 
 </html>

@@ -5,8 +5,6 @@ namespace App\Models;
 use App\Traits\HasTransaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cuti extends Model
@@ -41,7 +39,7 @@ class Cuti extends Model
 
     public function sisaCuti(): Attribute
     {
-        return Attribute::make(get: fn ($value, array $attributes) => $attributes['sisa_cuti_awal'] - $attributes['total_cuti']);
+        return Attribute::make(get: fn($value, array $attributes) => $attributes['sisa_cuti_awal'] - $attributes['total_cuti']);
     }
 
     // public function routeNotification(?int $priority = 1, $ref = 'notification')
@@ -87,4 +85,8 @@ class Cuti extends Model
     //     return $this->nextApprover ? $this->nextApprover->name : 'Tidak Diketahui'; // Default jika next approver kosong
     // }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Relasi ke model User menggunakan user_id
+    }
 }

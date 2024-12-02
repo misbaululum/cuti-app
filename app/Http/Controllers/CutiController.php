@@ -34,13 +34,13 @@ class CutiController extends Controller
     public function hitungCuti(Request $request)
     {
         $request->validate([
-           'tanggal_awal' => 'required|date:d-m-Y',
-           'tanggal_akhir' => 'required|date:d-m-Y',
+            'tanggal_awal' => 'required|date:d-m-Y',
+            'tanggal_akhir' => 'required|date:d-m-Y',
         ]);
 
         try {
             $totalCuti = $this->service->hitungCuti($request);
-            
+
             return $totalCuti;
         } catch (\Throwable $th) {
             return responseError($th);
@@ -52,7 +52,7 @@ class CutiController extends Controller
      */
     public function create()
     {
-       
+
         return view('pages.pengajuan.cuti-form', [
             'action' => route('pengajuan.cuti.store'),
             'data' => new Cuti(),
@@ -60,7 +60,7 @@ class CutiController extends Controller
             'sisaCuti' => user()->cutiTahunanActive->sisa_cuti
         ]);
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -70,7 +70,7 @@ class CutiController extends Controller
         DB::beginTransaction();
         try {
             // cek outstanding pengajuan
-            if (user()->cuti()->whereNull('status_approve')->orWhere(function($query){
+            if (user()->cuti()->whereNull('status_approve')->orWhere(function ($query) {
                 $query->whereNotNull('status_approve')->whereHas(
                     'latestHistory',
                     function ($query) {
@@ -84,7 +84,7 @@ class CutiController extends Controller
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'user_id' => user('id'),
                 'user_input' => user('nama'),
-                'nomor' => numbering($cuti, 'PC'.date('ym')),
+                'nomor' => numbering($cuti, 'PC' . date('ym')),
                 'total_cuti' => $this->service->hitungCuti($request)
             ]);
 
@@ -106,7 +106,7 @@ class CutiController extends Controller
             if ($atasanLangsung) {
                 Notification::send($atasanLangsung, new CutiNotification($cuti, [
                     'title' => 'Pengajuan Cuti',
-                    'body' => 'Terdapat pengajuan nomor: '. $cuti->nomor . ', an '.$cuti->user_input,
+                    'body' => 'Terdapat pengajuan nomor: ' . $cuti->nomor . ', an ' . $cuti->user_input,
                 ]));
             } else {
                 $hrd = User::role('hrd')->first();
@@ -115,7 +115,7 @@ class CutiController extends Controller
                 $history->save();
                 Notification::send($hrd, new CutiNotification($cuti, [
                     'title' => 'Pengajuan Cuti',
-                    'body' => 'Terdapat pengajuan nomor: '. $cuti->nomor . ', an '.$cuti->user_input,
+                    'body' => 'Terdapat pengajuan nomor: ' . $cuti->nomor . ', an ' . $cuti->user_input,
                 ]));
             }
 
@@ -134,21 +134,32 @@ class CutiController extends Controller
     public function show(Cuti $cuti)
     {
         return view('pages.pengajuan.cuti-form-detail', [
-           'data' => $cuti,
-           'action' => null
+            'data' => $cuti,
+            'action' => null
         ]);
     }
 
     public function generatePDF(Cuti $cuti)
     {
-        $pdf = PDF::loadView('pages.pengajuan.cuti-pdf', [
-            'data' => $cuti,
-            'date' => date('d-m-Y'),
-            'action' => null
-        ])->setPaper('A4', 'portrait');
+        // Ambil history terkait dengan cuti
+        $history = $cuti->history()->orderBy('tanggal', 'asc')->get();
 
-        return $pdf->download('application.pdf'); // Memaksa download PDF
-        // return $pdf->stream(); // Menampilkan PDF di browser jika tidak ada 'download' parameter
+        return view('pages.pengajuan.cuti-pdf', [
+            'data' => $cuti,
+            'approver1' => $history->first(),
+            'approver2' => $history->skip(1)->first(),
+            'action' => null
+        ]);
+
+        // // Pass both approvers to the view
+        // $pdf = PDF::loadView('pages.pengajuan.cuti-pdf', [
+        //     'data' => $cuti,
+        //     'approver1' => $history->first(),
+        //     'approver2' => $history->skip(1)->first(),
+        //     'action' => null
+        // ])->setPaper('A4', 'portrait');
+
+        // return $pdf->download('application.pdf');
     }
 
     /**
