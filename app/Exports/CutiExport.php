@@ -26,7 +26,7 @@ class CutiExport implements FromCollection, WithHeadings
         ])->get()->map(function ($item) {
             return [
                 $item->nomor,
-                $item->key,
+                $item->user_input,
                 \Carbon\Carbon::parse($item->tanggal_awal)->format('d-m-Y'),
                 \Carbon\Carbon::parse($item->tanggal_akhir)->format('d-m-Y'),
                 $item->total_cuti,
